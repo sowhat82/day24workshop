@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/uploads'));
 
 // upload file
-app.post('/upload', multipart.single('img-file'),
+app.post('/upload', multipart.single('image-file'),
     (req, resp) => {
 
         // if (!req.file) {
@@ -72,21 +72,32 @@ app.post('/upload', multipart.single('img-file'),
 );
   
 // get file
-app.get('/blob/:id', multipart.single('img-file'),
-    (req, resp) => {
+app.get('/blob/:id', (req, resp) => {
             
+            const id = req.params.id
+            console.info(id)
             // get object configurations
             const params = {
                 Bucket: 'day24workshop',
                 Key: id, // param of picture url
             }
 
-            s3.getObject(params, (error, result) => {
+                s3.getObject(params, (error, result) => {
+                    
 
-                return resp.status(200)
-                 .type('application/json')
-                 .json(result);
-            })
+                    if (error == null){
+                        return resp.status(200)
+                        .type('application/json')
+                        .json(result);   
+                    }
+                    else {
+                        console.info (error)
+                        return resp.status(500)
+                        .type('application/json')
+                        .json(error);   
+                    }
+
+                })    
     }
 );
 
