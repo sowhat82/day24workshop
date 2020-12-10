@@ -14,9 +14,10 @@ export class AppComponent implements OnInit {
   @ViewChild('retrieveKeyForm', {static: false}) retrieveKeyForm: NgForm;
   form: FormGroup;
 
-  latestKeyCreated = {}
-  fileInfo = {}
+  latestKeyCreated: any
+  fileInfo  = {}
   result: any;
+  image: any;
 
   constructor(private http: HttpClient, private fb: FormBuilder){}
 
@@ -38,10 +39,20 @@ export class AppComponent implements OnInit {
     console.info(this.latestKeyCreated)
 
       console.info('/blob/' + String(this.latestKeyCreated['key']))    
-     this.fileInfo = await this.http.get<any>('/blob/' + String(this.latestKeyCreated['key'])).toPromise()
+      this.fileInfo = await this.http.get<any>('/blob/' + String(this.latestKeyCreated['key'])).toPromise()
 
     console.info(this.fileInfo)
 
+  }
+
+  async uploadToSQL(){
+
+    const formData = new FormData();
+
+    formData.set('name', this.form.get('image-file').value);
+    formData.set('image-file', this.imageFile.nativeElement.files[0]);
+    
+    this.latestKeyCreated = await this.http.post<any>('/uploadToSQL', formData).toPromise()
   }
 
   async retrieveKey(key){
@@ -53,6 +64,20 @@ export class AppComponent implements OnInit {
     }
     else {
       this.fileInfo = this.result
+    }
+
+  }
+
+  async retrieveSQLImage(key){
+
+    this.image = await this.http.get<any>('/sqlblob/' + key.value, {observe: 'response', responseType: 'json'}).toPromise()
+    console.info('after receive image...')
+
+    if (this.image == null){
+      window.alert('Null returned')
+    }
+    else {
+  //    console.info(this.result)
     }
 
   }

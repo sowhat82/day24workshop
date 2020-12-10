@@ -1,18 +1,20 @@
-<form #uploadForm="ngForm" (ngSubmit)="upload()">
+<form #uploadForm="ngForm">
 
   Image:
   <input type="file" name="image-file" accept="image/*" ngModel #imageFile>
-  <button type="submit">POST</button>
+  <button type="submit" (click) = "upload()">POST TO S3</button>
+  <button type="submit" (click) = "uploadToSQL()">POST TO SQL</button>
 
 </form>
 
-<form #retrieveKeyForm="ngForm" (ngSubmit)="retrieveKey(key)">
+<form #retrieveKeyForm="ngForm">
 
   Retrieve Key:
   <div class="input-group mb-3">
-    <input #key type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+    <input #key type="text" class="form-control" placeholder="key or id" aria-label="Username" aria-describedby="basic-addon1">
   </div>
-  <button type="submit">Retrieve Key</button>
+  <button type="submit" (click) = "retrieveKey(key)">Retrieve Image from S3</button>
+  <button type="submit" (click) = "retrieveSQLImage(key)">Retrieve Image from SQL</button>
 
 </form>
 
