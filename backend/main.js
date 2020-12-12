@@ -108,34 +108,6 @@ app.post('/upload', multipart.single('image-file'),
                 .type('application/json')
                 .json({ 'key': req.file.filename });
             })
-
-            // post blob to sql
-            // const conn = await pool.getConnection()
-            // try {
-        
-            //     await conn.beginTransaction() // to prevent only one DB from being updated
-        
-            //     await conn.query(
-            //         SQL_ADD_NEW_IMAGE, [imgFile],
-            //     )
-        
-            //     await conn.commit()
-        
-            //     resp.status(200)
-            //     resp.format({
-            //         html: () => { resp.send('Thank you'); },
-            //         json: () => { resp.json({status: 'ok'});}
-        
-            //     })
-                    
-            // } catch(e) {
-            //     conn.rollback()
-            //     fs.unlink(req.file.path, ()=> { });
-            //     resp.status(500).send(e)
-            //     resp.end()
-            // } finally {
-            //     conn.release()
-            // }
         })
 
     }    

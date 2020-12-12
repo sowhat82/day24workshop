@@ -1,14 +1,15 @@
-create database if not exists birthday; 
+create database if not exists party; 
 
-use birthday;
+use party;
 
-create table IF NOT EXISTS rsvps (
+create table IF NOT EXISTS images (
 		id int not null auto_increment,
-		name varchar(30) not null,
-		email CHAR(255),
-		phone int,
-		answer varchar(20),
+		image mediumblob,
 		primary key (id)
 );
 
-SELECT * FRoM birthday.rsvps;
+SELECT * FRoM party.images;
+
+select image from images where id = 1;
+
+drop table images;

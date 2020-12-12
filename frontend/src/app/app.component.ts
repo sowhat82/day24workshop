@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,9 @@ export class AppComponent implements OnInit {
   fileInfo  = {}
   result: any;
   image: any;
+  uploadImg:any;
 
-  constructor(private http: HttpClient, private fb: FormBuilder){}
+  constructor(private http: HttpClient, private fb: FormBuilder, private sanitizer: DomSanitizer){}
 
   ngOnInit(){
     this.form = this.fb.group({
@@ -70,8 +72,11 @@ export class AppComponent implements OnInit {
 
   async retrieveSQLImage(key){
 
-    this.image = await this.http.get<any>('/sqlblob/' + key.value, {observe: 'response', responseType: 'json'}).toPromise()
-    console.info('after receive image...')
+    this.image = await this.http.get<any>('/sqlblob/' + key.value, {responseType: "blob" as "json"}).toPromise()
+    console.info('after receive image...', this.image)
+
+    let objectURL = URL.createObjectURL(this.image);       
+    this.uploadImg = this.sanitizer.bypassSecurityTrustUrl(objectURL);
 
     if (this.image == null){
       window.alert('Null returned')
