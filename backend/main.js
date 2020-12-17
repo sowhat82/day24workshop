@@ -166,9 +166,13 @@ app.get('/blob/:id', (req, resp) => {
                 s3.getObject(params, (error, result) => {
 
                     if (error == null){
-                        return resp.status(200)
-                        .type('application/json')
-                        .json(result);   
+                        // return resp.status(200)
+                        // .type('application/json')
+                        // .json(result);   
+                        resp.status(200)
+                        console.info(result)
+                        resp.type(imageType(result.Body).mime)
+                        resp.send((result.Body));
                     }
                     else {
                         console.info (error)
@@ -184,7 +188,8 @@ app.get('/blob/:id', (req, resp) => {
 app.get('/sqlblob/:id', async (req, resp) => {
 	const conn = await pool.getConnection()
 	try {
-		const [ results, _ ] = await conn.query(SQL_SELECT_IMAGE, [req.params.id])
+        const [ results, _ ] = await conn.query(SQL_SELECT_IMAGE, [req.params.id])
+        console.info(results[0])
        resp.status(200)
        resp.type(imageType(results[0].image).mime)
        console.info((results[0].image))

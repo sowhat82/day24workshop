@@ -59,14 +59,19 @@ export class AppComponent implements OnInit {
 
   async retrieveKey(key){
 
-    this.result = await this.http.get<any>('/blob/' + key.value).toPromise()
-
-    if (this.result == null){
+    this.image = await this.http.get<any>('/blob/' + key.value, {responseType: "blob" as "json"}).toPromise()
+    let objectURL = URL.createObjectURL(this.image);       
+    this.uploadImg = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    
+    if (this.image == null){
       window.alert('Null returned')
     }
     else {
       this.fileInfo = this.result
+      console.info(this.result)
     }
+
+
 
   }
 
